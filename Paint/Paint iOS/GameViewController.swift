@@ -32,20 +32,39 @@ class GameViewController: UIViewController {
         self.gameView.backgroundColor = UIColor.black
         
         // Add a tap gesture recognizer
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+
+        let tapGesture = UILongPressGestureRecognizer(target: self, action: #selector(handleTap(_:)))
         var gestureRecognizers = gameView.gestureRecognizers ?? []
         gestureRecognizers.insert(tapGesture, at: 0)
         self.gameView.gestureRecognizers = gestureRecognizers
     }
     
     @objc
-    func handleTap(_ gestureRecognizer: UIGestureRecognizer) {
-        // Highlight the tapped nodes
-        let p = gestureRecognizer.location(in: gameView)
-        //gameController.highlightNodes(atPoint: p)
-        gameController.launch()
+    func handleTap(_ gestureRecognizer: UILongPressGestureRecognizer) {
+        if gestureRecognizer.state == .changed {
+            gameController.launch()
+        }
     }
-    
+
+    var touchCount = 1
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+super.touchesBegan(touches, with: event)
+        touchCount += 1
+        Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { (timer) in
+            if self.touchCount == 2 {
+                self.gameController.launch()
+            } else {
+                timer.invalidate()
+            }
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchCount -= 1
+        super.touchesEnded(touches, with: event)
+    }
+
     override var shouldAutorotate: Bool {
         return true
     }

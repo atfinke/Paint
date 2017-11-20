@@ -31,19 +31,11 @@ class GameViewController: NSViewController {
         // Configure the view
         self.gameView.backgroundColor = NSColor.black
         
-        // Add a click gesture recognizer
-        let clickGesture = NSClickGestureRecognizer(target: self, action: #selector(handleClick(_:)))
-        var gestureRecognizers = gameView.gestureRecognizers
-        gestureRecognizers.insert(clickGesture, at: 0)
-        self.gameView.gestureRecognizers = gestureRecognizers
+
     }
     
-    @objc
-    func handleClick(_ gestureRecognizer: NSGestureRecognizer) {
-        // Highlight the clicked nodes
-        let p = gestureRecognizer.location(in: gameView)
-        //gameController.highlightNodes(atPoint: p)
-        gameController.launch()
+    override func mouseMoved(with event: NSEvent) {
+        print(1)
     }
 
     override func keyDown(with event: NSEvent) {
